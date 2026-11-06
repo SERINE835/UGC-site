@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UGC Connect</title>
+<link rel="icon" type="image/png" href="image/logo.png">
+<style>
+:root{--navy:#071124;--green:#2fbf71;--blue:#2c44ac;--bg:#244593;--card:#fff;--txt:#93a8d6;--mut:#a3abc7;--bd:#dbe3f0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px ;)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111f43;--card:#18233d;--txt:#e8edf7;--mut:#94a1bd;--bd:#2a3856}}
+:root[data-theme="dark"]{--bg:#132141;--card:#213154;--txt:#e8edf7;--mut:#8e9ab6;--bd:#2a3856}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;font-size: 18px;}
+a{color:inherit;text-decoration:none}
+nav{background:var(--navy);color:#fff;display:flex;align-items:center;gap:20px;padding:12px 24px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+.logo{font-weight:800;font-size:20px;letter-spacing:.5px}.logo b{color:var(--green)}
+nav .links{display:flex;gap:22px;flex:1;font-size:18px}
+nav .links a{opacity:.8;padding-bottom:3px}nav .links a.on{opacity:1;border-bottom:2px solid var(--green)}
+.btn{display:inline-block;border:0;cursor:pointer;font:inherit;font-weight:600;font-size:16px;padding:12px 24px;border-radius:999px;background:var(--navy);color:#fff}
+.btn.g{background:var(--green);color:#fff}.btn.o {
+  background: transparent;
+  color: #c9d6ee; 
+  border: 1.5px solid #c9d6ee;}
+  .cc {
+  padding: 16px !important;
+}
+.btn.w{background:transparent;color:#fff;border:1.5px solid #fff}
+main{max-width:1050px;margin:0 auto;padding:28px 20px}
+.view{display:none}.view.on{display:block}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:22px}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:center}
+.hero h1{font-size:52px;line-height:1.15;color:var(--navy)}.hero h1 span{color:var(--green)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero h1{color:#fff}}
+.hero p{color:var(--mut);margin:18px 0 22px}
+.pic {
+  height: 420px; /* Increased height so the phone doesn't look squished */
+  border-radius: 24px;
+  overflow: hidden; /* This ensures the image stays inside the rounded corners */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg,#1d4f91,#2fbf71); /* Keeps the gradient in case the image loads slowly */
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:30px 0}
+.banner{background:linear-gradient(120deg,var(--navy),#2b5a9c);color:#fff;text-align:center;border-radius:16px;padding:40px 20px}
+.banner p{margin:8px 0 18px;opacity:.85}
+h2{margin-bottom:6px}
+label{display:block;font-size:13px;font-weight:600;margin:12px 0 4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--card);color:var(--txt)}
+.two{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}
+.steps{display:flex;gap:16px;margin-bottom:18px;font-size:13px;color:var(--mut)}
+.steps b{display:inline-block;width:24px;height:24px;border-radius:50%;background:var(--bd);text-align:center;line-height:24px;margin-right:6px}
+.steps .on{color:var(--txt);font-weight:600}.steps .on b{background:var(--navy);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.chip{border:1px solid var(--bd);border-radius:999px;padding:5px 14px;font-size:13px;cursor:pointer;background:var(--card);user-select:none}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.plan{border:2px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0;cursor:pointer}.plan.on{border-color:var(--blue);background:rgba(29,79,145,.08)}
+.err{color:#d33;font-size:13px;margin-top:8px;min-height:18px}.ok{color:var(--green)}
+.pro{background:var(--green);color:#fff;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:700}
+.ava{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#f0b3a1,#8b5a4a);display:flex;align-items:center;justify-content:center;font-size:52px;flex:none}
+.prof{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.cc .th {
+  height: 140px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#c9d6ee,#8fa7d0); /* Keeps the background for images that fail to load */
+  position: relative;
+  margin-bottom: 10px;
+  overflow: hidden; /* This keeps the image inside the rounded corners */
+}
+.cc b {
+  font-size: 18px; /* Make the name bigger */
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Add this new class for the image itself */
+.creator-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This makes the photo fill the box without stretching */
+  display: block;
+}
+cc {
+  padding: 16px !important;}
+.cc .th .pro{position:absolute;top:8px;left:8px}
+.cc small {
+  font-size: 15px; /* Increase from default ~12px */
+  color: var(--mut);
+  line-height: 1.6; /* Better spacing for multi-line text */
+}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.bar input{flex:1;min-width:180px}.bar select{width:auto}
+.bar input, .bar select {
+  font-size: 15px;
+  padding: 12px 16px; /* Make the boxes taller and easier to click */
+}
+.bar label {
+  font-size: 15px;
+}
+
+.side{display:grid;grid-template-columns:200px 1fr;gap:20px}
+.side ul{list-style:none;padding:0}.side li{padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px}.side li.on{background:var(--navy);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.stats .card b{font-size:28px;display:block}
+footer{background:var(--navy);color:#fff;text-align:center;padding:26px;margin-top:30px;font-style:italic}
+@media(max-width:760px){.hero,.two,.side{grid-template-columns:1fr}.hero h1{font-size:30px}nav{gap:10px}}
+/* Dropdown Container */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Button */
+.dropbtn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.dropbtn .arrow {
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+.dropdown-menu.show + .dropbtn .arrow,
+.dropdown.open .dropbtn .arrow {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu Box */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--card);
+  min-width: 270px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  padding: 20px;
+  z-index: 100;
+  border: 1px solid var(--bd);
+  margin-top: 12px;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+/* Dropdown Title */
+.dropdown-menu h4 {
+  font-size: 15px;
+  color: var(--navy);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .dropdown-menu h4 { color: #fff; }
+}
+:root[data-theme="dark"] .dropdown-menu h4 { color: #fff; }
+
+/* Dropdown Links - Overriding nav defaults */
+nav .links .dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  color: var(--txt);
+  font-size: 14px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  opacity: 1; /* Reset opacity from nav a */
+  border-bottom: none; /* Reset border from nav a */
+}
+
+nav .links .dropdown-menu a:hover {
+  background: var(--bg);
+}
+
+nav .links .dropdown-menu a .icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between the icon and "UGC CONNECT" */
+}
+
+.logo-img {
+  height: 40px; /* This shrinks the 1393px image down to 40px for the navbar */
+  width: auto;  /* Keeps the proportions correct */
+  display: block;
+}
+/* Styles for the fake portfolio links */
+.fake-work-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  padding: 10px;
+  transition: background 0.2s, transform 0.2s;
+  border: 1px solid var(--bd);
+  cursor: pointer;
+}
+
+.fake-work-link:hover {
+  background: var(--green);
+  transform: translateY(-2px); /* Makes it pop up slightly when you hover */
+}
+
+/* Ensure the avatar image fits in the circle */
+.ava {
+  overflow: hidden;
+  background: none;
+}
+.ava-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.feat .card {
+  font-size: 18px;
+}
+.feat .card small {
+  font-size: 15px; /* Makes "From all Algerian cities" readable */
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="#home" class="logo">
+  <img src="image/logo.png" alt="Logo" class="logo-img">
+  UGC<b>CONNECT</b>
+</a>
+  <div class="links">
+    <a href="#home" data-l="home">Home</a><a href="#creators" data-l="creators">Creators</a><a href="#dashboard" data-l="dashboard">Campaigns</a><div class="dropdown">
+      <a href="#solution" data-l="solution" class="dropbtn" id="solutionsBtn">Solutions <span class="arrow">▼</span></a>
+      <div class="dropdown-menu" id="solutionsMenu">
+        <h4>Solutions by Industry</h4>
+        <a href="#solutions-ecommerce">🛒 E-commerce Brands &amp; DTC</a>
+        <a href="#solutions-amazon">📦 Amazon Sellers</a>
+        <a href="#solutions-tiktok">🎵 TikTok Shop Sellers</a>
+        <a href="#solutions-agencies">📢 Marketing Agencies</a>
+        <a href="#solutions-apps">💻 Apps &amp; Software</a>
+        <a href="#solutions-local">📍 Local Businesses</a>
+      </div>
+    </div>
+  </div>
+  </div>
+  <a href="#login" class="btn w">Log in</a>
+  <a href="#signup-creator" class="btn g">Sign up</a>
+</nav>
+
+<main>
+<!-- HOME -->
+<section class="view" id="home">
+  <div class="hero">
+    <div>
+      <i style="color:var(--blue)">Real people. Real content.</i>
+      <h1>Authentic content.<br>Real Algerian creators.<br><span>UGC CONNECT</span></h1>
+      <p>UGC DZ connects Algerian businesses with talented content creators. Find the right creator or grow your brand with authentic content.</p>
+      <a href="#creators" class="btn">🔍 Find a Creator</a> <a href="#signup-brand" class="btn o">I'm a Brand</a>
+    </div>
+    <div class="pic">
+  <img src="image/phone-mockup.png" alt="Phone Mockup" class="hero-img">
+</div>
+  </div>
+  <div class="feat">
+    <div class="card">🧑‍🎤 <b>Local Creators</b><br><small>From all Algerian cities</small></div>
+    <div class="card">⚡ <b>Easy to Use</b><br><small>Simple and fast</small></div>
+    <div class="card">🔒 <b>Secure &amp; Trusted</b><br><small>Verified creators</small></div>
+    <div class="card">🇩🇿 <b>100% Algerian</b><br><small>Local support</small></div>
+  </div>
+  <div class="banner"><h2>Ready to get started?</h2><p>Join our community and be part of a growing movement.</p><a href="#creators" class="btn g">Explore now →</a></div>
+</section>
+
+<!-- CREATOR SIGNUP -->
+<section class="view" id="signup-creator">
+  <div class="steps"><span class="on"><b>1</b>Account</span><span><b>2</b>Profile</span><span><b>3</b>Plan (optional)</span></div>
+  <div class="two">
+    <form class="card" id="fCreator" novalidate>
+      <h2>Create your creator account</h2><small style="color:var(--mut)">Join UGC DZ and start getting opportunities.</small>
+      <label>Full name *</label><input name="name" placeholder="Your name">
+      <label>Email *</label><input name="email" type="email" placeholder="you@example.com">
+      <label>Password *</label><input name="p1" type="password" placeholder="Create a password">
+      <label>Confirm password *</label><input name="p2" type="password" placeholder="Confirm your password">
+      <label>City *</label>
+      <select name="city"><option value="">Select your city</option><option>Algiers</option><option>Oran</option><option>Constantine</option><option>Annaba</option><option>Blida</option><option>Tizi Ouzou</option></select>
+      <label>What are you good at?</label>
+      <div class="chips" data-multi><span class="chip">Video</span><span class="chip">Photo</span><span class="chip">Reels</span><span class="chip">TikTok</span><span class="chip">Voice-over</span><span class="chip">Unboxing</span><span class="chip">Testimonial</span></div>
+      <div class="err" id="eC"></div>
+      <button class="btn" style="width:100%;margin-top:6px">Next →</button>
+    </form>
+    <div class="card">
+      <h2>Want the Pro badge? 👑</h2><small style="color:var(--mut)">Brands see Pro creators first in search results.</small>
+      <div class="plan" data-plan="Basic"><b>Basic</b> — Free<br><small>Limited visibility</small></div>
+      <div class="plan on" data-plan="Pro"><b>Pro</b> — 2,000 DA / month<br><small>Pro badge · top of search · priority support</small></div>
+      <button type="button" class="btn" style="width:100%" id="planBtn">Continue with Pro</button>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND SIGNUP -->
+<section class="view" id="signup-brand">
+  <div class="steps"><span class="on"><b>1</b>Business info</span><span><b>2</b>Payment</span><span><b>3</b>Confirmation</span></div>
+  <div class="two">
+    <form class="card" id="fBrand" novalidate>
+      <h2>Create your brand account</h2><small style="color:var(--mut)">Start finding the best creators for your business.</small>
+      <label>Business name *</label><input name="biz" placeholder="Your business name">
+      <label>Email *</label><input name="email" type="email" placeholder="you@example.com">
+      <label>Phone number *</label><input name="tel" placeholder="+213 XX XX XX XX">
+      <label>Business category *</label>
+      <select name="cat"><option value="">Select category</option><option>Beauty</option><option>Fashion</option><option>Food</option><option>Tech</option><option>Fitness</option></select>
+      <label>Instagram (optional)</label><input placeholder="@yourbrand">
+      <label>Password *</label><input name="p1" type="password">
+      <label>Confirm password *</label><input name="p2" type="password">
+      <div class="err" id="eB"></div>
+      <button class="btn" style="width:100%;margin-top:6px">Continue</button>
+    </form>
+    <div class="card">
+      <h2>🔒 Payment required</h2>
+      <p style="color:var(--mut);margin:8px 0">To create a brand account, you need to pay a registration fee of</p>
+      <h1>5,000 DA</h1><small>(one-time payment)</small>
+      <p style="color:var(--mut);margin:12px 0">This fee helps us verify businesses and keep the platform professional and secure.</p>
+      <button type="button" class="btn" style="width:100%" id="payBtn">Pay 5,000 DA</button>
+      <div class="err" id="eP"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CREATORS LIST -->
+<section class="view" id="creators">
+  <div class="bar">
+    <input id="q" placeholder="Search creators...">
+    <select id="fc"><option value="">Category</option><option>Beauty</option><option>Fashion</option><option>Food</option><option>Lifestyle</option><option>Tech</option></select>
+    <select id="fl"><option value="">Location</option><option>Algiers</option><option>Oran</option><option>Constantine</option></select>
+    <label style="margin:0;display:flex;align-items:center;gap:6px"><input type="checkbox" id="fp" style="width:auto"> Pro only</label>
+  </div>
+  <div class="grid4" id="list"></div>
+  <p id="none" style="display:none;color:var(--mut)">No creators found.</p>
+</section>
+
+<!-- PROFILE -->
+<section class="view" id="profile">
+  <a href="#creators" style="color:var(--mut)">← Back to creators</a>
+  
+  <div class="card prof" style="margin:14px 0">
+    <!-- The Avatar Image -->
+    <div class="ava">
+      <img id="pAva" src="image/sarah.png" alt="Avatar" class="ava-img">
+    </div>
+    <div>
+      <h2 id="pn">Sarah B. <span class="pro">Pro</span></h2>
+      <div style="color:var(--mut)">📍 <span id="pc">Algiers, Algeria</span> · ⭐ <span id="pr">4.8</span> (24 reviews) · 12 projects</div>
+      <div style="margin-top:12px"><button class="btn" id="contact">Contact Creator</button> <button class="btn o" id="save">♡ Save</button></div>
+    </div>
+  </div>
+
+  <div class="two" style="grid-template-columns:1.4fr 1fr">
+    <div class="card">
+      <b>About me</b>
+      <p id="pBio" style="color:var(--mut);margin-top:8px">Hi! I'm a UGC creator...</p>
+      <p style="margin-top:8px">🗣 Arabic, French, English</p>
+    </div>
+    <div class="card">
+      <b>My services</b>
+      <ul id="pServices" style="margin:8px 0 0 18px;color:var(--mut)">
+        <li>Product videos</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin:20px 0 10px">My work</h3>
+  <!-- The Portfolio Grid (Now uses fake links) -->
+  <div class="grid4" id="pWork">
+    <!-- JavaScript will fill this in -->
+  </div>
+</section>
+<!-- LOGIN -->
+<section class="view" id="login">
+  <div style="max-width: 420px; margin: 40px auto;">
+    <div class="card">
+      <h2 style="text-align:center; margin-bottom: 4px;">Welcome Back</h2>
+      <p style="text-align:center; color:var(--mut); font-size:14px; margin-bottom: 20px;">Log in to your UGC Connect account</p>
+      
+      <form id="fLogin" novalidate>
+        <label>Email or Username</label>
+        <input name="user" type="text" placeholder="you@example.com">
+        
+        <label>Password</label>
+        <input name="pass" type="password" placeholder="Enter your password">
+        
+        <!-- Forgot Password & Remember Me row -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px;">
+          <label style="display:flex; align-items:center; gap:6px; margin:0; font-weight:normal; cursor:pointer;">
+            <input type="checkbox" style="width:auto;"> Remember me
+          </label>
+          <a href="#forgot" style="font-size:13px; color:var(--blue); text-decoration:underline;">Forgot password?</a>
+        </div>
+
+        <div class="err" id="eL" style="margin-top: 10px;"></div>
+        
+        <button class="btn g" style="width:100%; margin-top: 16px;">Log In</button>
+      </form>
+      
+      <div style="text-align:center; margin-top: 20px; font-size: 14px;">
+        Don't have an account? <a href="#signup-creator" style="color:var(--blue); font-weight:600;">Sign up</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- DASHBOARD -->
+<section class="view" id="dashboard">
+  <div class="side">
+    <div class="card"><ul id="menu"><li class="on">Dashboard</li><li>My Profile</li><li>Portfolio</li><li>Applications</li><li>Saved Campaigns</li><li>Messages</li><li>Settings</li></ul></div>
+    <div>
+      <h2>Hello, Sarah! 👋</h2><small style="color:var(--mut)">Here's what's happening with your account.</small>
+      <div class="stats"><div class="card">Applications<b id="nApp">4</b></div><div class="card">Active campaigns<b>2</b></div><div class="card">Completed projects<b>8</b></div></div>
+      <h3 style="margin-bottom:10px">Available campaigns</h3>
+      <div class="grid4" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="card"><b>Skincare Brand</b><br><small>Beauty · 5,000 – 8,000 DA · Deadline 20/10/2026</small><br><br><button class="btn ap" style="width:100%">Apply</button></div>
+        <div class="card"><b>Food Brand</b><br><small>Food · 3,000 – 6,000 DA · Deadline 26/10/2026</small><br><br><button class="btn ap" style="width:100%">Apply</button></div>
+      </div>
+      <div class="card" style="margin-top:16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap"><span style="font-size:36px">👑</span><div style="flex:1"><b>Your Pro badge is active!</b><br><small>You appear first in search results and get more views from brands.</small></div><button class="btn">Manage plan</button></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>Same vision, bigger impact ✓ · #UGCCONNECT</footer>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+// ---------- Router (hash navigation) ----------
+function route(){
+  const id=(location.hash||'#home').slice(1);
+  const v=document.getElementById(id)?id:'home';
+  $$('.view').forEach(e=>e.classList.toggle('on',e.id===v));
+  const map={'signup-creator':'','signup-brand':'','profile':'creators','login':''};
+  const act=v in map?map[v]:v;
+  $$('nav .links a').forEach(a=>a.classList.toggle('on',a.dataset.l===act));
+  scrollTo(0,0);
+}
+addEventListener('hashchange',route);route();
+
+// ---------- Creators data + filters ----------
+const creators=[
+ {n:'Sarah B.',c:'Algiers',cat:'Beauty',r:4.8,rv:24,p:3600,pro:1,img:'image/sarah.png',
+  bio:"Hi! I'm a UGC creator based in Algiers. I create authentic and natural content about beauty, skincare, and lifestyle.", 
+  services:["Product videos", "Unboxing videos", "Testimonial videos", "Reels / TikTok"],
+  work:["Skincare Routine", "Makeup Haul", "Honest Review"]},
+
+ {n:'Lina K.',c:'Algiers',cat:'Fashion',r:4.6,rv:18,p:2500,pro:1,img:'image/linak.png',
+  bio:"Fashion enthusiast from Algiers. I love creating trendy, aesthetic fashion reels and styling videos for brands.", 
+  services:["Fashion Reels", "Styling Videos", "Product Photography"],
+  work:["Summer Lookbook", "Winter Haul", "Brand Collab"]},
+
+ {n:'Yasmine D.',c:'Constantine',cat:'IT',r:4.7,rv:10,p:4000,pro:1,img:'image/yasmine.png',
+  bio:"Tech and IT reviewer based in Constantine. I break down complex tech products into easy-to-understand videos.", 
+  services:["Tech Reviews", "Unboxing", "App Tutorials"],
+  work:["Smartphone Review", "Gadget Unboxing", "App Walkthrough"]},
+
+ {n:'Nour S.',c:'Algiers',cat:'Food',r:4.5,rv:15,p:3600,pro:0,img:'image/nour.png',
+  bio:"Foodie and chef from Algiers. I create mouth-watering food content, recipes, and restaurant reviews.", 
+  services:["Recipe Videos", "Restaurant Reviews", "Food Photography"],
+  work:["Algerian Pastry", "Street Food Tour", "Healthy Meals"]},
+
+ {n:'Marouane R.',c:'Oran',cat:'Techtravel',r:4.4,rv:9,p:3000,pro:0,img:'image/marouane.png',
+  bio:"Travel and tech creator from Oran. I document my journeys and showcase the best gadgets for travel.", 
+  services:["Travel Vlogs", "Tech Setup Tours", "Drone Footage"],
+  work:["Sahara Trip", "Travel Gadgets", "Hotel Review"]},
+
+ {n:'Mohamed.',c:'Oran',cat:'Gym',r:4.9,rv:31,p:5000,pro:1,img:'image/mohamed.png',
+  bio:"Fitness coach and gym creator. I specialize in workout routines, supplement reviews, and motivational content.", 
+  services:["Workout Tutorials", "Supplement Reviews", "Gym Vlogs"],
+  work:["Chest Workout", "Protein Review", "Day in the Life"]}
+];
+function render(){
+  const q=$('#q').value.toLowerCase(),c=$('#fc').value,l=$('#fl').value,p=$('#fp').checked;
+  const res=creators.filter(x=>x.n.toLowerCase().includes(q)&&(!c||x.cat===c)&&(!l||x.c===l)&&(!p||x.pro))
+    .sort((a,b)=>b.pro-a.pro);
+  $('#list').innerHTML=res.map(x=>`<div class="card cc" style="padding:12px;cursor:pointer" data-n="${x.n}">
+  <div class="th">${x.pro?'<span class="pro">Pro</span>':''}<img src="${x.img}" class="creator-img" alt="${x.n}"></div>
+  <b>${x.n}</b><br>
+   <small>📍 ${x.c} · ${x.cat}</small><br><small>⭐ ${x.r} (${x.rv})</small><br><small>From ${x.p.toLocaleString()} DA</small></div>`).join('');
+  $('#none').style.display=res.length?'none':'block';
+}
+['input','change'].forEach(ev=>['#q','#fc','#fl','#fp'].forEach(s=>$(s).addEventListener(ev,render)));
+$('#list').addEventListener('click',e=>{
+  const card=e.target.closest('[data-n]');if(!card)return;
+  const x=creators.find(k=>k.n===card.dataset.n);
+  
+  // 1. Update the basic info
+  $('#pn').innerHTML=x.n+(x.pro?' <span class="pro">Pro</span>':'');
+  $('#pc').textContent=x.c+', Algeria';
+  $('#pr').textContent=x.r;
+  
+  // 2. Update the Avatar Image
+  $('#pAva').src = x.img; 
+
+  // 3. Update the Bio
+  $('#pBio').textContent = x.bio;
+
+  // 4. Update the Services list
+  $('#pServices').innerHTML = x.services.map(s => `<li>${s}</li>`).join('');
+
+  // 5. Update the Portfolio "Work" links
+  $('#pWork').innerHTML = x.work.map(w => 
+    `<a href="#demo" class="fake-work-link" onclick="alert('Viewing portfolio piece: ${w} (Demo)'); return false;">
+      🎬 ${w}
+    </a>`
+  ).join('');
+
+  location.hash='#profile';
+});
+
+// ---------- Interactions ----------
+$$('[data-multi] .chip').forEach(c=>c.onclick=()=>c.classList.toggle('on'));
+$$('.plan').forEach(p=>p.onclick=()=>{$$('.plan').forEach(k=>k.classList.remove('on'));p.classList.add('on');$('#planBtn').textContent='Continue with '+p.dataset.plan});
+$('#planBtn').onclick=()=>{alert('Account created! Welcome to UGC Connect.');location.hash='#dashboard'};
+$('#save').onclick=e=>{const b=e.target;b.textContent=b.textContent.includes('♥')?'♡ Save':'♥ Saved'};
+$('#contact').onclick=()=>alert('Message sent to the creator (demo).');
+$$('.ap').forEach(b=>b.onclick=()=>{if(b.disabled)return;b.textContent='Applied ✓';b.disabled=true;$('#nApp').textContent=+$('#nApp').textContent+1});
+$$('#menu li').forEach(li=>li.onclick=()=>{$$('#menu li').forEach(k=>k.classList.remove('on'));li.classList.add('on')});
+// ---------- Dropdown Logic ----------
+const solutionsBtn = document.getElementById('solutionsBtn');
+const solutionsMenu = document.getElementById('solutionsMenu');
+
+if (solutionsBtn && solutionsMenu) {
+  // Toggle menu on click
+  solutionsBtn.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent page from jumping to #solution
+    solutionsMenu.classList.toggle('show');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!solutionsBtn.contains(e.target) && !solutionsMenu.contains(e.target)) {
+      solutionsMenu.classList.remove('show');
+    }
+  });
+
+  // Close menu when a link inside is clicked
+  solutionsMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      solutionsMenu.classList.remove('show');
+    });
+  });
+}
+
+// ---------- Form validation ----------
+function check(form,out,fields){
+  const d=Object.fromEntries(new FormData(form));
+  for(const f of fields) if(!(d[f]||'').trim()) return 'Please fill in all required fields (*).';
+  if(!/^\S+@\S+\.\S+$/.test(d.email)) return 'Invalid email address.';
+  if(d.p1.length<6) return 'Password must be at least 6 characters.';
+  if(d.p1!==d.p2) return 'Passwords do not match.';
+  return '';
+}
+$('#fCreator').onsubmit=e=>{e.preventDefault();
+  const m=check(e.target,'#eC',['name','email','p1','p2','city']);
+  $('#eC').textContent=m;if(!m){$('#eC').textContent='';alert('Step 1 complete! Choose a plan on the right.')}};
+$('#fBrand').onsubmit=e=>{e.preventDefault();
+  const m=check(e.target,'#eB',['biz','email','tel','cat','p1','p2']);
+  $('#eB').textContent=m||'✓ Info saved. Now proceed to payment.';$('#eB').className='err'+(m?'':' ok')};
+$('#payBtn').onclick=()=>{
+  if($('#eB').classList.contains('ok')){alert('Payment successful (demo)!');location.hash='#dashboard'}
+  else $('#eP').textContent='Please complete the business info first.'};
+  // ---------- Login Logic ----------
+$('#fLogin').onsubmit = e => {
+  e.preventDefault(); // Stop the page from reloading
+  
+  const user = e.target.user.value.trim();
+  const pass = e.target.pass.value.trim();
+  const errBox = $('#eL');
+  
+  // Simple validation
+  if (!user || !pass) {
+    errBox.textContent = 'Please enter both your email and password.';
+    return;
+  }
+  
+  errBox.textContent = ''; // Clear errors
+  alert('Login successful (demo)! Redirecting to dashboard...');
+  
+  // Redirect to the dashboard after "logging in"
+  location.hash = '#dashboard';
+};
+</script>
+</body>
+</html>
